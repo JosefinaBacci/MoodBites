@@ -65,10 +65,6 @@ class JournalModel {
     await docRef.update(updatedData);
   }
 
-  String _formatDateKey(DateTime date) {
-    return date.toIso8601String().substring(0, 10);
-  }
-
   Future<List<Map<String, dynamic>>> getAllEntries() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) throw Exception('Not authenticated');
