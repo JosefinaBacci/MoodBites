@@ -12,18 +12,15 @@ class JournalModel {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) throw Exception('Not authenticated');
 
-    final start = Timestamp.fromDate(
-      DateTime(date.year, date.month, date.day).toUtc(),
-    );
-    final end = Timestamp.fromDate(
-      DateTime(date.year, date.month, date.day, 23, 59, 59, 999).toUtc(),
-    );
+    final startOfDay = DateTime.utc(date.year, date.month, date.day);
+    final start = Timestamp.fromDate(startOfDay);
+    final end = Timestamp.fromDate(startOfDay.add(Duration(days: 1)));
 
     final query = await _db
         .collection('journal_entries')
         .where('userId', isEqualTo: uid)
         .where('date', isGreaterThanOrEqualTo: start)
-        .where('date', isLessThanOrEqualTo: end)
+        .where('date', isLessThan: end)
         .get();
 
     if (query.docs.isNotEmpty) {
@@ -34,7 +31,7 @@ class JournalModel {
       'userId': uid,
       'text': text,
       'mood': mood,
-      'date': Timestamp.fromDate(date.toUtc()),
+      'date': start,
     });
   }
 
@@ -51,7 +48,7 @@ class JournalModel {
 
     if (text != null) updatedData['text'] = text;
     if (mood != null) updatedData['mood'] = mood;
-    if (date != null) updatedData['date'] = date.toIso8601String();
+    if (date != null) updatedData['date'] = Timestamp.fromDate(date.toUtc());
 
     if (updatedData.isEmpty) return; // Nothing to update
 
@@ -68,6 +65,7 @@ class JournalModel {
   Future<List<Map<String, dynamic>>> getAllEntries() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) throw Exception('Not authenticated');
+
     final snapshot = await _db
         .collection('journal_entries')
         .where('userId', isEqualTo: uid)
@@ -77,6 +75,11 @@ class JournalModel {
     return snapshot.docs.map((doc) {
       final data = doc.data();
       data['id'] = doc.id;
+
+      if (data['date'] is Timestamp) {
+        data['date'] = (data['date'] as Timestamp).toDate().toIso8601String();
+      }
+
       return data;
     }).toList();
   }
