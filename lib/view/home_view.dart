@@ -5,6 +5,7 @@ import '../presenter/entry_presenter.dart';
 import '../presenter/login_presenter.dart';
 import 'login_view.dart';
 import 'entries_view.dart';
+import 'time_capsule_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -106,6 +107,16 @@ class _HomeViewState extends State<HomeView> {
                 );
               },
               child: const Text('View My Entries'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TimeCapsuleScreen()),
+                );
+              },
+              child: const Text('📦 Time Capsules'),
             ),
             const SizedBox(height: 30),
             ElevatedButton(
