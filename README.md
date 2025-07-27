@@ -1,8 +1,11 @@
-# 📝 MoodJournal
+# 📝 MoodBites 
 
 **MoodBites** is a Flutter-based emotional journaling app that allows users to reflect on their daily moods, receive personalized food recommendations, and interact with a supportive AI-powered chatbot named **CrumBot**. This project aims to promote emotional well-being and mindfulness through expressive writing, interactive tools, and future AI integrations.
 
-<img width="734" height="540" alt="image" src="https://github.com/user-attachments/assets/3b383f1b-bf29-4469-9ca4-1839226ab300" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3b383f1b-bf29-4469-9ca4-1839226ab300" width="500" />
+</p>
+
 ---
 
 ## 🌟 Features
@@ -44,12 +47,12 @@
 | **Flutter**    | UI Development (Cross-platform: Android/iOS)                        |
 | **Dart**       | Programming Language                                                |
 | **Firebase Firestore** | Cloud database for storing journal entries and user data    |
-| **Firebase Auth**      | User authentication (if implemented)                        |
+| **Firebase Auth**      | User authentication                                         |
 | **Hugging Face** *(planned)* | For future AI integrations (emotion-to-food, CrumBot) |
 
 ---
 
-## 🚧 Upcoming Features
+## 🚧 Upcoming Features (Stay tuned!)
 
 - 🔮 **LLM-powered food recommendation engine**
   - Detect emotions in user text and suggest foods dynamically.
@@ -66,6 +69,22 @@
 
 ## 🚀 Getting Started
 
+###⚠️ Important (Must Read)
+
+As this is an early version of the app and time constraints limited the implementation of a full authentication flow, the current **sign-up process** is manual.
+
+To register:
+
+1. Fill in the required information in the **email** and **password** input fields.
+2. Then press the **"Sign Up"** button located at the bottom of the screen.
+
+Once signed up, your session will be created, and you can start using the app.
+
+> ⚠️ Please note: there is **no error handling or UI feedback** yet if the sign-up fails (e.g., due to an invalid email or weak password), so make sure to enter valid credentials.
+
+Future versions will include proper sign up view, form validation, and user feedback.
+
+
 ### Prerequisites
 
 - Flutter SDK: [Install Flutter](https://docs.flutter.dev/get-started/install)
@@ -76,3 +95,9 @@
 
 ```bash
 git clone https://github.com/JosefinaBacci/MoodBites.git
+```
+<p align="center">
+  <img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/67664058-8be3-4306-af7f-0cccc2128215" />
+  <img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/7d742d84-3ece-495e-9ce9-67b0db4bc99a" />
+  <img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/250e3dbf-48d7-4c35-b3df-1d10f8bb04ca" />
+</p>
