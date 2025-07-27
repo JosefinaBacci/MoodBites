@@ -61,7 +61,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFD3DADC),
+      backgroundColor: Color(0xFFE8E2DA),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -131,7 +131,7 @@ class _LoginViewState extends State<LoginView> {
                           color: Color.fromARGB(153, 59, 77, 101),
                         ),
                         filled: true,
-                        fillColor: Color(0xFFD3DADC),
+                        fillColor: Color(0xFFE8E2DA),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
@@ -156,7 +156,7 @@ class _LoginViewState extends State<LoginView> {
                           color: Color.fromARGB(153, 59, 77, 101),
                         ),
                         filled: true,
-                        fillColor: Color(0xFFD3DADC),
+                        fillColor: Color(0xFFE8E2DA),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,

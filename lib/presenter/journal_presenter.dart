@@ -1,9 +1,7 @@
 import '../model/journal_model.dart';
-import '../model/ai_model.dart';
 
 class JournalPresenter {
   final JournalModel _jm = JournalModel();
-  final AIModel _ai = AIModel();
 
   Future<void> saveEntry(DateTime date, String text, String mood) async {
     await _jm.storeEntry(text: text, mood: mood, date: date);
@@ -18,8 +16,8 @@ class JournalPresenter {
     await _jm.updateEntry(entryId: entryId, text: text, mood: mood, date: date);
   }
 
-  Future<String> analyzeAndGetFood(String text) =>
-      _ai.getFoodRecommendation(text);
+  Future<String> analyzeAndGetFood(String text, String mood) =>
+      _jm.analyzeAndGetFood(text, mood);
 
   Future<List<Map<String, dynamic>>> getAllEntries() => _jm.getAllEntries();
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
 
 class JournalModel {
   final _db = FirebaseFirestore.instance;
@@ -82,5 +83,56 @@ class JournalModel {
 
       return data;
     }).toList();
+  }
+
+  Future<String> analyzeAndGetFood(String text, String mood) async {
+    final rnd = Random();
+
+    final Map<String, List<String>> moodFoods = {
+      'happy': [
+        'Egyptian Mahshi',
+        'Pakistan’s Chicken Biryani',
+        'Rasmalai (India)',
+        'Patishapta Pitha (Bangladesh)',
+        'Argentinian Asado',
+      ],
+      'calm': [
+        'Dal and Rice',
+        'Foul and Ta3meya (fafa beans and falafel)',
+        'Khichuri',
+        'Garlic chicken salad',
+        'Medialunas',
+      ],
+      'angry': [
+        'Okra (Ladyfinger)',
+        'Koshary (rice, lentils, and chickpea mix)',
+        'Gulab Jamun',
+        'Chocolate',
+        'Pasta with vegetables',
+      ],
+      'sad': [
+        'Maggie (Noodles)',
+        'Basbousa (syrup soaked semolina dessert)',
+        'Patishapta Pitha',
+        'Ramen',
+        'Milanesas with mashed potatoes',
+      ],
+      'tired': [
+        'Matcha',
+        'Coffee',
+        'Om Ali (puff pastry w nuts and milk)',
+        'Tea',
+        'Khichuri',
+      ],
+    };
+
+    final moodKey = mood.toLowerCase();
+
+    if (moodFoods.containsKey(moodKey)) {
+      final options = moodFoods[moodKey]!;
+      return options[rnd.nextInt(options.length)];
+    } else {
+      return 'Unknown';
+    }
   }
 }
