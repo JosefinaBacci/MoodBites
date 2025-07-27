@@ -264,7 +264,7 @@ class _LoginViewState extends State<LoginView> {
       height: 55,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: const Color(0xFFD3DADC),
+        color: const Color(0xFFE8E2DA),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Image.asset(path),
