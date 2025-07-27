@@ -2,6 +2,7 @@
 
 **MoodBites** is a Flutter-based emotional journaling app that allows users to reflect on their daily moods, receive personalized food recommendations, and interact with a supportive AI-powered chatbot named **CrumBot**. This project aims to promote emotional well-being and mindfulness through expressive writing, interactive tools, and future AI integrations.
 
+<img width="734" height="540" alt="image" src="https://github.com/user-attachments/assets/3b383f1b-bf29-4469-9ca4-1839226ab300" />
 ---
 
 ## 🌟 Features
@@ -74,5 +75,4 @@
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/moodjournal.git
-cd moodjournal
+git clone https://github.com/JosefinaBacci/MoodBites.git
