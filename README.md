@@ -80,7 +80,7 @@ To register:
 
 Once signed up, your session will be created, and you can start using the app.
 
-> ⚠️ Please note: there is **no error handling or UI feedback** yet if the sign-up fails (e.g., due to an invalid email or weak password), so make sure to enter valid credentials.
+> ⚠️ Please note: there is **no error handling or UI feedback** yet if the sign-up fails (e.g., due to an invalid user or weak password), so make sure to enter valid credentials.
 
 Future versions will include proper sign up view, form validation, and user feedback.
 
