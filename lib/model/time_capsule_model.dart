@@ -20,7 +20,8 @@ class TimeCapsuleModel {
       final data = doc.data();
       data['id'] = doc.id;
 
-      final unlockAt = (data['unlockAt'] as Timestamp).toDate();
+      // Convertir a UTC para comparación correcta
+      final unlockAt = (data['unlockAt'] as Timestamp).toDate().toUtc();
       final remaining = unlockAt.difference(now);
 
       data['timeRemaining'] = remaining;
@@ -43,7 +44,7 @@ class TimeCapsuleModel {
     await docRef.set({
       'userId': uid,
       'message': message,
-      'unlockAt': Timestamp.fromDate(unlockAt.toUtc()),
+      'unlockAt': Timestamp.fromDate(unlockAt.toUtc()), // Guardar en UTC
       'isOpened': false,
     });
   }

@@ -35,21 +35,86 @@ class _TimeCapsuleScreenState extends State<TimeCapsuleScreen> {
     _presenter.loadCapsules();
   }
 
-  void _showCapsuleDialog(String capsuleId, String message) {
+  void _showCapsuleDialog(String capsuleId, String message, DateTime unlockAt) {
+    final now = DateTime.now().toUtc();
+    if (now.isBefore(unlockAt)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('This capsule is still locked.')),
+      );
+      return;
+    }
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Your message from the past ✉️"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            child: const Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
-              _presenter.openCapsule(capsuleId);
-            },
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: const Color(0xFFF5F1E9), // beige suave
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+              maxWidth: 350,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Your message from the past ✉️",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF3B4D65),
+                    shadows: [
+                      Shadow(
+                        offset: Offset(1, 1),
+                        blurRadius: 2,
+                        color: Colors.black26,
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Text(
+                      message,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        height: 1.4,
+                        color: Color(0xFF333333),
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF3B4D65),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 12,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _presenter.openCapsule(capsuleId);
+                  },
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, color: Color(0xFFD3DADC)),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -64,11 +129,20 @@ class _TimeCapsuleScreenState extends State<TimeCapsuleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE8E2DA),
       appBar: AppBar(
-        title: const Text("Time capsule"),
+        backgroundColor: const Color(0xFF3B4D65),
+        title: const Text(
+          'Upcoming Capsules',
+          style: TextStyle(
+            color: Color(0xFFD3DADC),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.add, color: Color(0xFFD3DADC)),
             onPressed: () async {
               final result = await Navigator.push(
                 context,
@@ -93,30 +167,73 @@ class _TimeCapsuleScreenState extends State<TimeCapsuleScreen> {
               ),
             )
           : ListView.builder(
+              padding: const EdgeInsets.all(16),
               itemCount: _capsules.length,
               itemBuilder: (context, index) {
                 final capsule = _capsules[index];
-                final unlockAt = (capsule['unlockAt'] as Timestamp).toDate();
-                final isUnlocked = capsule['isUnlocked'] as bool;
-                final timeRemaining = capsule['timeRemaining'] as Duration;
+                final unlockAt = (capsule['unlockAt'] as Timestamp)
+                    .toDate()
+                    .toUtc();
+                final now = DateTime.now().toUtc();
+                final isUnlocked =
+                    now.isAfter(unlockAt) || now.isAtSameMomentAs(unlockAt);
+                final timeRemaining = unlockAt.isBefore(now)
+                    ? Duration.zero
+                    : unlockAt.difference(now);
+                final message = capsule['message'] ?? '';
 
-                return ListTile(
-                  title: isUnlocked
-                      ? Text(capsule['message'])
-                      : const Text("🔒 Capsule locked"),
-                  subtitle: isUnlocked
-                      ? const Text("¡You can open it!")
-                      : Text("It unlocks in ${_formatDuration(timeRemaining)}"),
-                  trailing: Icon(
-                    isUnlocked ? Icons.lock_open : Icons.lock,
-                    color: isUnlocked ? Colors.green : Colors.grey,
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 238, 236, 232),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 5,
+                        offset: const Offset(2, 4),
+                      ),
+                    ],
                   ),
-                  onTap: isUnlocked
-                      ? () => _showCapsuleDialog(
-                          capsule['id'],
-                          capsule['message'],
-                        )
-                      : null,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(16),
+                    title: Text(
+                      isUnlocked ? message : "🔒 Capsule locked",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: const Color(0xFF3B4D65),
+                      ),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(
+                          'Unlocks at: ${unlockAt.toLocal()}',
+                          style: const TextStyle(color: Colors.black54),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          isUnlocked
+                              ? '¡You can open it!'
+                              : 'It unlocks in ${_formatDuration(timeRemaining)}',
+                          style: const TextStyle(color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                    trailing: Icon(
+                      isUnlocked ? Icons.lock_open : Icons.lock_clock,
+                      color: const Color(0xFF455763),
+                    ),
+                    onTap: isUnlocked
+                        ? () => _showCapsuleDialog(
+                            capsule['id'],
+                            message,
+                            unlockAt,
+                          )
+                        : null,
+                  ),
                 );
               },
             ),
